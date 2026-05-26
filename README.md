@@ -5,7 +5,7 @@ ExpenSmart is a personal expense tracker dashboard built as a lightweight, perfo
 ## Project Structure
 
 ```text
-personal-expense-tracker/
+pet/
 ├── data/
 │   └── expenses.json       # Local JSON datastore
 ├── public/
