@@ -1,0 +1,42 @@
+[
+  {
+    "id": "e22bb272-97b7-4c4b-b5d1-931bf8cb2a02",
+    "title": "Weekly Groceries",
+    "amount": 85.2,
+    "category": "Food",
+    "date": "2026-05-23",
+    "note": "Purchased from Whole Foods"
+  },
+  {
+    "id": "e33bb272-97b7-4c4b-b5d1-931bf8cb2a03",
+    "title": "Uber Ride",
+    "amount": 18.5,
+    "category": "Transport",
+    "date": "2026-05-24",
+    "note": "Ride home from downtown"
+  },
+  {
+    "id": "e44bb272-97b7-4c4b-b5d1-931bf8cb2a04",
+    "title": "Running Shoes",
+    "amount": 110,
+    "category": "Shopping",
+    "date": "2026-05-15",
+    "note": "Nike Pegasus road running shoes"
+  },
+  {
+    "id": "e55bb272-97b7-4c4b-b5d1-931bf8cb2a05",
+    "title": "Electricity Bill",
+    "amount": 145,
+    "category": "Bills",
+    "date": "2026-05-05",
+    "note": "Monthly electric utility payment"
+  },
+  {
+    "id": "e77bb272-97b7-4c4b-b5d1-931bf8cb2a07",
+    "title": "Laundry Detergent",
+    "amount": 14.25,
+    "category": "Other",
+    "date": "2026-05-10",
+    "note": "Bought laundry pods and fabric softener"
+  }
+]

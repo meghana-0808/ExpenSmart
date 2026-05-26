@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="ExpenSmart is a premium personal expense tracker dashboard with detailed monthly insights, visual category breakdowns, and advanced filtering options.">
+  <title>ExpenSmart // Premium Personal Expense Tracker</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <!-- Vanilla CSS Link -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Toast Notification System -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <header class="app-header">
+    <div class="header-container">
+      <div class="logo-area">
+        <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="1" x2="12" y2="23"></line>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+        </svg>
+        <span class="logo-text">Expen<span class="logo-highlight">Smart</span></span>
+      </div>
+      <div class="header-controls">
+        <span id="current-time-display" class="time-display"></span>
+        <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Dark Mode">
+          <!-- Moon Icon (Light Mode Active, switch to dark) -->
+          <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <!-- Moon Icon -->
+          <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="app-main-layout">
+    <div class="layout-container">
+
+      <!-- Top Row / Sidebar: Overview Summary -->
+      <section class="summary-section" aria-labelledby="summary-heading">
+        <div class="glass-card summary-card">
+          <div class="card-header">
+            <h2 id="summary-heading" class="card-title">Monthly Summary</h2>
+            <div class="summary-month-selector">
+              <label for="summary-month-picker" class="sr-only">Choose Month</label>
+              <input type="month" id="summary-month-picker" class="form-control-compact"
+                aria-label="Select Summary Month">
+            </div>
+          </div>
+
+          <div class="summary-display">
+            <span class="summary-label">Total Spent This Month</span>
+            <div class="total-spent-amount" id="total-spent-display">$0.00</div>
+          </div>
+
+          <!-- Budget bar -->
+          <div class="budget-container">
+            <div class="budget-header">
+              <span>Monthly Budget Cap</span>
+              <span id="budget-progress-text">$0 / $2,000</span>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill" id="budget-progress-fill" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <hr class="card-divider">
+
+          <div class="breakdown-container">
+            <h3 class="breakdown-title">Category Breakdown</h3>
+            <div class="category-list" id="category-breakdown-list">
+              <!-- Dynamically populated category bars -->
+              <div class="category-breakdown-item placeholder-loading"></div>
+              <div class="category-breakdown-item placeholder-loading"></div>
+              <div class="category-breakdown-item placeholder-loading"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Center Pane: Filters & Expense List -->
+      <section class="expenses-section" aria-labelledby="expenses-heading">
+        <h1 id="expenses-heading" class="sr-only">Expenses and Filters</h1>
+
+        <!-- Filters Card -->
+        <div class="glass-card filters-card">
+          <div class="filters-header">
+            <div class="filters-title-area">
+              <svg class="icon-small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+              </svg>
+              <h3>Filters & Search</h3>
+            </div>
+            <button id="clear-filters-btn" class="btn btn-text btn-sm" type="button">Clear Filters</button>
+          </div>
+
+          <div class="filters-grid">
+            <!-- Title search -->
+            <div class="form-group">
+              <label for="filter-title-input">Search Title</label>
+              <div class="input-with-icon">
+                <input type="text" id="filter-title-input" class="form-control" placeholder="e.g. Starbucks">
+                <svg class="search-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Category filter -->
+            <div class="form-group">
+              <label for="filter-category-select">Category</label>
+              <select id="filter-category-select" class="form-control">
+                <option value="">All Categories</option>
+                <option value="Food">Food</option>
+                <option value="Transport">Transport</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Bills">Bills</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <!-- Date From -->
+            <div class="form-group">
+              <label for="filter-date-from">Date From</label>
+              <input type="date" id="filter-date-from" class="form-control">
+            </div>
+
+            <!-- Date To -->
+            <div class="form-group">
+              <label for="filter-date-to">Date To</label>
+              <input type="date" id="filter-date-to" class="form-control">
+            </div>
+          </div>
+
+          <!-- Quick Filters -->
+          <div class="quick-filters-row">
+            <span class="quick-filters-label">Quick Presets:</span>
+            <button id="quick-preset-this-month" class="btn btn-chip" type="button">This Month</button>
+            <button id="quick-preset-last-30" class="btn btn-chip" type="button">Last 30 Days</button>
+            <button id="quick-preset-this-year" class="btn btn-chip" type="button">This Year</button>
+          </div>
+        </div>
+
+        <!-- Expenses List Card -->
+        <div class="glass-card list-card">
+          <div class="list-card-header">
+            <h3>Transaction Records</h3>
+            <span class="results-count" id="results-count-display">0 transactions</span>
+          </div>
+
+          <div class="expenses-list" id="expenses-container">
+            <!-- Dynamically populated cards or empty states -->
+            <div class="empty-state">
+              <div class="empty-icon-container">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="9" y1="15" x2="15" y2="15"></line>
+                  <line x1="12" y1="12" x2="12" y2="18"></line>
+                </svg>
+              </div>
+              <p class="empty-title">No transactions found</p>
+              <p class="empty-subtitle">Try adjusting your filters or record a new expense.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Pane: Add Expense Form -->
+      <section class="add-section" aria-labelledby="add-heading">
+        <div class="glass-card add-card">
+          <h2 id="add-heading" class="card-title">Record New Expense</h2>
+
+          <form id="add-expense-form" class="expense-form" novalidate>
+            <!-- Title -->
+            <div class="form-group">
+              <label for="expense-title">Title <span class="required-indicator">*</span></label>
+              <input type="text" id="expense-title" class="form-control" placeholder="e.g. Coffee at Starbucks" required
+                maxlength="100">
+              <span class="field-error-message" id="error-title"></span>
+            </div>
+
+            <!-- Amount & Category Group -->
+            <div class="form-row">
+              <div class="form-group col-6">
+                <label for="expense-amount">Amount ($) <span class="required-indicator">*</span></label>
+                <input type="number" id="expense-amount" class="form-control" placeholder="0.00" step="0.01" min="0.01"
+                  required>
+                <span class="field-error-message" id="error-amount"></span>
+              </div>
+
+              <div class="form-group col-6">
+                <label for="expense-category">Category <span class="required-indicator">*</span></label>
+                <select id="expense-category" class="form-control" required>
+                  <option value="" disabled selected>Select...</option>
+                  <option value="Food">Food</option>
+                  <option value="Transport">Transport</option>
+                  <option value="Shopping">Shopping</option>
+                  <option value="Bills">Bills</option>
+                  <option value="Entertainment">Entertainment</option>
+                  <option value="Other">Other</option>
+                </select>
+                <span class="field-error-message" id="error-category"></span>
+              </div>
+            </div>
+
+            <!-- Date -->
+            <div class="form-group">
+              <label for="expense-date">Date <span class="required-indicator">*</span></label>
+              <input type="date" id="expense-date" class="form-control" required>
+              <span class="field-error-message" id="error-date"></span>
+            </div>
+
+            <!-- Note -->
+            <div class="form-group">
+              <label for="expense-note">Note <span class="optional-label">(Optional)</span></label>
+              <textarea id="expense-note" class="form-control" rows="3"
+                placeholder="Add specific details..."></textarea>
+              <span class="field-error-message" id="error-note"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full-width">
+              <svg class="icon-small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              <span>Add Expense</span>
+            </button>
+          </form>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Edit Expense Modal Dialog -->
+  <div id="edit-expense-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-heading">
+    <div class="modal-container glass-card">
+      <div class="modal-header">
+        <h2 id="modal-heading" class="modal-title">Edit Expense</h2>
+        <button id="close-modal-btn" class="modal-close-btn" aria-label="Close Edit Modal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+            stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="edit-expense-form" class="expense-form" novalidate>
+          <input type="hidden" id="edit-expense-id">
+
+          <!-- Title -->
+          <div class="form-group">
+            <label for="edit-expense-title">Title <span class="required-indicator">*</span></label>
+            <input type="text" id="edit-expense-title" class="form-control" required maxlength="100">
+            <span class="field-error-message" id="edit-error-title"></span>
+          </div>
+
+          <!-- Amount & Category -->
+          <div class="form-row">
+            <div class="form-group col-6">
+              <label for="edit-expense-amount">Amount ($) <span class="required-indicator">*</span></label>
+              <input type="number" id="edit-expense-amount" class="form-control" step="0.01" min="0.01" required>
+              <span class="field-error-message" id="edit-error-amount"></span>
+            </div>
+
+            <div class="form-group col-6">
+              <label for="edit-expense-category">Category <span class="required-indicator">*</span></label>
+              <select id="edit-expense-category" class="form-control" required>
+                <option value="Food">Food</option>
+                <option value="Transport">Transport</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Bills">Bills</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Other">Other</option>
+              </select>
+              <span class="field-error-message" id="edit-error-category"></span>
+            </div>
+          </div>
+
+          <!-- Date -->
+          <div class="form-group">
+            <label for="edit-expense-date">Date <span class="required-indicator">*</span></label>
+            <input type="date" id="edit-expense-date" class="form-control" required>
+            <span class="field-error-message" id="edit-error-date"></span>
+          </div>
+
+          <!-- Note -->
+          <div class="form-group">
+            <label for="edit-expense-note">Note <span class="optional-label">(Optional)</span></label>
+            <textarea id="edit-expense-note" class="form-control" rows="3"></textarea>
+            <span class="field-error-message" id="edit-error-note"></span>
+          </div>
+
+          <div class="modal-footer-actions">
+            <button type="button" id="cancel-edit-btn" class="btn btn-secondary">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <footer class="app-footer">
+    <p>&copy; 2026 ExpenSmart.</p>
+  </footer>
+
+  <!-- Vanilla JS Link -->
+  <script src="app.js"></script>
+</body>
+
+</html>
