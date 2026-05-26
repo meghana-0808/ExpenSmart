@@ -2,6 +2,9 @@
 
 ExpenSmart is a personal expense tracker dashboard built as a lightweight, performant, and visual web application. It runs completely locally with zero cloud dependencies.
 
+## Project Structure
+
+```text
 personal-expense-tracker/
 ├── data/
 │   └── expenses.json       # Local JSON datastore
@@ -12,7 +15,7 @@ personal-expense-tracker/
 ├── package.json            # Dependencies and scripts
 ├── README.md               # Setup instructions and project notes
 └── server.js               # Express server and API routes
-
+```
 ## Features Built
 
 1. **Add Expense Form**:
